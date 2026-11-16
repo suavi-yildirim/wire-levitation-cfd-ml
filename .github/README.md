@@ -29,6 +29,7 @@ This work combines three parts:
 
 | Folder | Contents |
 |---|---|
+| `01_Thesis/PDF/` | The thesis as PDF ([`MA_Yildirim_2026_CFD_ML_Wire_in_Tube_Conveying_public.pdf`](../01_Thesis/PDF/MA_Yildirim_2026_CFD_ML_Wire_in_Tube_Conveying_public.pdf)) |
 | `01_Thesis/LaTeX_Source/` | Complete LaTeX source of the thesis (FAPS template). Main file: `FAPS-Thesis.tex`; chapters, appendix, `figures/`, `tables/` and bibliography files (the CV is not included) |
 | `03_Experimental_Data/` | Raw WFE run logs `WFE_<UID>_<instance>_<YYYYMMDD>_<HHMM>.csv` sorted by tube and wire type (`01_WFE_Runs/WC08/UIDxx/`, `01_WFE_Runs/WC10/UIDxx/`), silencer-effect runs (`02_WFE_Silencer_Effect/`), TFA runs and processed tables (`03_TFA_Tube_Flow_Analysis/`, see `TFA_WFE_Description.txt`), stable-phase and per-configuration summaries (`04_Summaries/`) |
 | `04_CAD_Geometry/` | Air-volume fluid domains as STEP files per wire UID in `WC08/` and `WC10/`; `Helical_Study/` holds the 9 helical variants of UID 18 in WC10 |
