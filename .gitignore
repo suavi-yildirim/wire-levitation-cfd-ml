@@ -1,37 +1,36 @@
-# Allow-list: everything is ignored except the folders re-included below.
-# Personal documents, thesis text, literature, admin files and raw photos stay local.
+# Allow-list: everything is ignored except the paths re-included below.
+# Literature, project documentation, figures, raw photos and personal files stay local.
 /*
 !/.gitignore
-!/README.md
+!/.github/
 !/LICENSE
 !/LICENSE-DATA.md
 !/CITATION.cff
-!/docs/
 
-# Experimental data (WFE runs, TFA runs, summaries)
+# Thesis LaTeX source (no CV, no compiled PDF)
+!/01_Thesis/
+/01_Thesis/*
+!/01_Thesis/LaTeX_Source/
+/01_Thesis/LaTeX_Source/CV/
+
+# Experimental data (WFE runs, silencer effect, TFA, summaries)
 !/03_Experimental_Data/
 
 # CAD geometries of the fluid domains
 !/04_CAD_Geometry/
 
-# CFD simulation reports (screenshots and notes stay local)
+# CFD simulation reports (ANSYS screenshots and the SharePoint shortcut stay local)
 !/05_CFD_Simulation/
 /05_CFD_Simulation/*
 !/05_CFD_Simulation/Report_Data/
 
-# Analysis scripts (session command dumps stay local)
+# Analysis scripts
 !/06_Analysis_Scripts/
 /06_Analysis_Scripts/raw_commands/
 
-# Machine learning datasets and scripts (old versions and thesis text stay local)
+# Machine learning datasets and scripts (old versions stay local)
 !/07_Machine_Learning_PIML/
-/07_Machine_Learning_PIML/*
-!/07_Machine_Learning_PIML/MATLAB_PIML/
 /07_Machine_Learning_PIML/MATLAB_PIML/Old/
-!/07_Machine_Learning_PIML/thesis_ml_update/
-/07_Machine_Learning_PIML/thesis_ml_update/*.tex
-/07_Machine_Learning_PIML/thesis_ml_update/*.bak*
-/07_Machine_Learning_PIML/thesis_ml_update/changes.diff
 
 # Straightness analysis: code and results only, no raw photos
 !/08_Straightness_Analysis/

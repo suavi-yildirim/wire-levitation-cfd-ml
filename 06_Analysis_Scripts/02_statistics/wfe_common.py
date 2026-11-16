@@ -14,7 +14,11 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 MASTERS_THESIS = HERE.parents[1]
-DATA_DIR = MASTERS_THESIS / "03_Experimental_Data"
+# Submission drive: the summaries are in 03_Experimental_Data/04_Summaries of the first
+# parent folder that contains 03_Experimental_Data. Override with WFE_SUMMARIES.
+import os
+_ROOT = next((d for d in HERE.parents if (d / "03_Experimental_Data").is_dir()), MASTERS_THESIS)
+DATA_DIR = Path(os.environ.get("WFE_SUMMARIES", _ROOT / "03_Experimental_Data" / "04_Summaries"))
 OUT_DIR = HERE.parent / "output"
 OUT_DIR.mkdir(exist_ok=True)
 

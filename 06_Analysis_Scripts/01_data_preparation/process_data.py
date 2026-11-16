@@ -6,15 +6,27 @@ from io import StringIO
 
 import pandas as pd
 
-FOLDER_PATH = "/Users/Suavi/Desktop/Thesis_Data"
-OUTPUT_CSV = os.path.join(FOLDER_PATH, "Stable_Phase_Summary.csv")
-OUTPUT_XLSX = os.path.join(FOLDER_PATH, "Stable_Phase_Summary.xlsx")
+# Raw WFE runs: 03_Experimental_Data/01_WFE_Runs/<tube>/<UID>/ on the submission drive
+# (searched recursively). Override with the environment variables WFE_RUNS / WFE_SUMMARY_OUT.
+_DRIVE = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+FOLDER_PATH = os.environ.get("WFE_RUNS", os.path.join(_DRIVE, "03_Experimental_Data", "01_WFE_Runs"))
+OUT_DIR = os.environ.get("WFE_SUMMARY_OUT", os.path.join(_DRIVE, "06_Analysis_Scripts", "output", "stable_phase_summary"))
+os.makedirs(OUT_DIR, exist_ok=True)
+OUTPUT_CSV = os.path.join(OUT_DIR, "Stable_Phase_Summary.csv")
+OUTPUT_XLSX = os.path.join(OUT_DIR, "Stable_Phase_Summary.xlsx")
 
-OUTPUT_TRUE_CSV = os.path.join(FOLDER_PATH, "Stable_Phase_Summary__SystemStable_TRUE.csv")
-OUTPUT_FALSE_CSV = os.path.join(FOLDER_PATH, "Stable_Phase_Summary__SystemStable_FALSE.csv")
+OUTPUT_TRUE_CSV = os.path.join(OUT_DIR, "Stable_Phase_Summary__SystemStable_TRUE.csv")
+OUTPUT_FALSE_CSV = os.path.join(OUT_DIR, "Stable_Phase_Summary__SystemStable_FALSE.csv")
 
 # Settings
 MIN_PHASE_DURATION_MS = 1000
+
+# Position sensors of the lifting section. All of them are part of the sensor state,
+# also when a sensor never switches during a run (fix of 20 Oct 2026: before, only
+# sensors that appear in the run's change log were known; when the wire stabilised
+# low, S18-S20 never fired, the set of active sensors came out empty and the run was
+# labelled "unknown" - 69 stable runs, which are all "wire_rises").
+LIFT_SENSORS = range(16, 21)
 
 NEEDED_COLS = [
     "Pressure_Stable_Min",
@@ -361,7 +373,7 @@ def replay_sensor_states_until(df_sensor_changes, ref_time):
     if df_sensor_changes is None or df_sensor_changes.empty or pd.isna(ref_time):
         return {}
 
-    all_sensors = sorted(df_sensor_changes["Sensor_Number"].dropna().astype(int).unique().tolist())
+    all_sensors = sorted(set(LIFT_SENSORS) | set(df_sensor_changes["Sensor_Number"].dropna().astype(int).unique().tolist()))
     sensor_states = {s: True for s in all_sensors}
 
     relevant = df_sensor_changes[df_sensor_changes["Changed_Time"] <= ref_time].copy()
@@ -526,7 +538,7 @@ def extract_all_from_file(filepath: str):
 
 
 def main():
-    csv_files = sorted(glob.glob(os.path.join(FOLDER_PATH, "*.csv")))
+    csv_files = sorted(glob.glob(os.path.join(FOLDER_PATH, "**", "WFE_*.csv"), recursive=True))
     csv_files = [fp for fp in csv_files if not is_generated_summary_file(fp)]
 
     print(f"Found {len(csv_files)} raw CSV files.")

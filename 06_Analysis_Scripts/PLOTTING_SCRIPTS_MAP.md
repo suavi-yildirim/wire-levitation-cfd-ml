@@ -1,4 +1,6 @@
 > Copies of these scripts are now in the grouped folders of this directory; see README.md ("Folder layout"). Paths below refer to the original locations in the thesis folder.
+>
+> **Drive layout (15 Nov 2026):** all figures now live in `09_Figures/` (see `09_Figures/FIGURE_MAP.md`). The former `03_Experimental_Data/06_Plots/` plots are in `09_Figures/07_Exploratory_Plots/WFE/` (rebuilt plots as PDF; the old helical PNG in `09_Figures/99_Superseded_and_Working/`), the TFA plots in `09_Figures/07_Exploratory_Plots/TFA/`. The scripts formerly in `03_Experimental_Data/05_Scripts/` and `03_TFA_Tube_Flow_Analysis/` were identical to the copies in `01_data_preparation/`, `02_statistics/` and `03_figures_wfe_cfd/`; two scripts without a copy were moved here: `01_data_preparation/isolated_ls10.py` (was `isolated_ls10`, writes `ieee_isolated_ls10.png`) and `03_figures_wfe_cfd/mass_flow_trend_plot.py` (was `untitled.py`, writes `mass_flow_trend_ieee_smaller_text.png`).
 
 # Plotting scripts found in the thesis folder
 
@@ -65,3 +67,21 @@ Also not found for the CFD image pairs (`cfd_yplus_pair.png`, `cfd_air_volume_pa
 ## Old versions
 
 `03_PIML/Old/` and `03_PIML/Old/Scripts - Copy/` contain earlier MATLAB versions. Use them only for reference.
+
+## Plots in `03_Experimental_Data/06_Plots` (added 2026-11-15)
+
+Nine PNG plots made with Claude in earlier chats. Paths are relative to the `MA_YILDIRIM` drive. The original PNGs stay unchanged; the new scripts write to `06_Analysis_Scripts/output/06_Plots_regenerated/` (PDF + PNG), not into `06_Plots`.
+
+| Plot (`06_Plots/`) | Script | Data (file → columns) | Status |
+|---|---|---|---|
+| `plot_pressure_vs_flow_by_section_ieee.png` | `generate_uid_experimental_summary.py` (01_WFE_Processing; drive: `06_Analysis_Scripts/01_data_preparation/`), Plot 1 | `04_Summaries/Stable_Phase_Summary__SystemStable_TRUE.csv` → `WIRE_uid`, `Tube_Diameter`, `Pressure_Stable_Average (mbar)`, `Flow_Stable_Average (Nm^3/h)`; section and length from metadata in the script | Original script, writes this file name |
+| `plot_length_vs_pressure_by_section_ieee.png` | same, Plot 2 | same | Original script |
+| `plot_uid_pressure_boxplot_split_section_ieee.png` | same, Plot 3 | same | Original script |
+| `plot_uid_pressure_boxplot_split_length_ieee.png` | same, Plot 4 | same | Original script |
+| `plot_stabilization_trend_share.png` | **new** `wfe_overview_plots.py` (01_WFE_Processing; drive: `06_Analysis_Scripts/02_statistics/`) | same CSV → `Final_Trend`, filter `WIRE_section` ∈ {0.5, 1.0, 1.5, 4.0, 6.0} | Rebuilt. Shares match the PNG exactly: 56.2 % rises (445), 35.1 % drops (278), 8.7 % undetermined (69), N = 792 |
+| `plot_section_pressure_boxplot.png` | **new** `wfe_overview_plots.py` | same CSV → `WIRE_section`, `Pressure_Stable_Average (mbar)`; both tubes pooled | Rebuilt. Medians match; 1.0 mm² upper quartile differs slightly (CSV was rewritten on 23 Jul, the PNG is from 22 Jul) |
+| `plot_length_vs_pressure_with_error_band.png` | **new** `wfe_overview_plots.py` | same CSV → `WIRE_section`, `WIRE_lenght (m)`, `Pressure_Stable_Average (mbar)`; mean ± 1 SD per section and length, both tubes pooled; table in `length_vs_pressure_mean_sd.csv` | Rebuilt |
+| `plot_pressure_vs_flow_by_section.png` | **new** `wfe_overview_plots.py` | same CSV → `Flow_Stable_Average (Nm^3/h)`, `Pressure_Stable_Average (mbar)`, `WIRE_section`; OLS line with 95 % CI | Rebuilt. Fit: p = −233.9 + 108.8·Q (mbar, Nm³/h), R² = 0.972, n = 792 |
+| `Helical_Deformation_Aerodynamics.png` | **new** `fig_helical_aerodynamics.py` (03_CFD; drive: `06_Analysis_Scripts/03_figures_wfe_cfd/`); the PNG itself was panels 1 + 2 of `Helix_Plots.py` | `05_CFD_Simulation/Report_Data/Master_Helix_CFD_Database.xlsx` + `Master_CFD_Database.xlsx` (sheet `Summary_Results`) → `Helix_Dia`, `Helix_Rev`, `total-wire-drag-force`, `pressure-inlet`, `mass-flow-inlet`; reference `WC10_UID18` = 0 revolutions | **Not reproducible.** The PNG shows Rev 2 and 4 and a varying mass flow; the drive only has Rev 1, 3, 5 with a fixed inlet mass flow (8.576e-3 kg/s). The new script plots the current cases: (a) wire drag, (b) inlet pressure. Table in `helical_aerodynamics_table.csv` |
+
+Shared style of the new scripts: same colours and serif fonts as `WFE_thesis_figures 2/code/style.py`, width 16 cm, vector PDF (fonttype 42) plus PNG.

@@ -24,5 +24,3 @@ They are not standalone: most of them write to hard-coded paths in the thesis fo
 | `thread_render_slides.py` | Renders selected pages of a PDF (progress slides) to PNG | — |
 | `thread_uid19.py` | Plots the residual files of one case | — |
 | `thread_reorg.py` | Moves the figures into the chapter folders and rewrites their paths in the .tex files | changes the thesis folder; check before running |
-
-Not included: one-line checks and LaTeX text edits made in the same session.
