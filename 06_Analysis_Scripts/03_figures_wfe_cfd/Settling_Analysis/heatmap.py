@@ -22,12 +22,15 @@ for p in sorted(glob.glob(os.path.join(s.DATA_DIR, "WFE_*.csv"))):
     tube = {"8": "WC08", "10": "WC10"}.get(diameter)
     if tube is None:
         continue
-    sec = header(p, "WIRE_section")
-    length = header(p, "WIRE_lenght")
-    if sec is None or length is None:
+    # Cross-section and length are taken from the wire UID, not from the WIRE_section /
+    # WIRE_lenght header fields: a few logs carry wrong header values (e.g. three UID 5 runs
+    # in WC08 logged as 0.5 mm2, three UID 8 runs in WC10 logged as 2 m).
+    uid = header(p, "WIRE_uid")
+    if uid is None:
         continue
-    sec = sec.replace(".", ",")
-    length = length.replace(".", ",")
+    block, k = divmod(int(float(uid)) - 1, 4)
+    sec = SECTIONS[{0: 0, 1: 1, 2: 2, 4: 3, 5: 4}[block]]
+    length = LENGTHS[k]
     t = s.settling_time(p, s.load_response(p))
     records.append((os.path.basename(p), tube, sec, length, t))
 
@@ -39,6 +42,8 @@ with open("settling_summary.csv", "w", newline="") as fh:
         w.writerow([r[0], r[1], r[2], r[3], "" if r[4] is None else round(r[4], 2)])
 
 fig, axes = plt.subplots(1, 2, figsize=(10, 4.2), sharey=True)
+# one colour scale for both tubes, so that the colour bar is valid for both panels
+VMAX = max(statistics.median(v) for v in [[r[4] for r in records if (r[1], r[2], r[3]) == key and r[4] is not None] for key in {(r[1], r[2], r[3]) for r in records}] if v)
 for ax, tube in zip(axes, ["WC08", "WC10"]):
     grid = np.full((len(SECTIONS), len(LENGTHS)), np.nan)
     labels = [["" for _ in LENGTHS] for _ in SECTIONS]
@@ -49,8 +54,8 @@ for ax, tube in zip(axes, ["WC08", "WC10"]):
             if done:
                 grid[i, j] = statistics.median(done)
             labels[i][j] = f"{'-' if not done else f'{grid[i, j]:.1f}'}\n{len(done)}/{len(cell)}"
-    im = ax.imshow(grid, cmap=FAPS, aspect="auto", vmin=0, vmax=np.nanmax(grid))
-    norm = Normalize(vmin=0, vmax=np.nanmax(grid))
+    im = ax.imshow(grid, cmap=FAPS, aspect="auto", vmin=0, vmax=VMAX)
+    norm = Normalize(vmin=0, vmax=VMAX)
     for i in range(len(SECTIONS)):
         for j in range(len(LENGTHS)):
             ax.text(j, i, labels[i][j], ha="center", va="center", fontsize=8, color=("white" if np.isfinite(grid[i, j]) and sum(FAPS(norm(grid[i, j]))[:3]) / 3 < 0.55 else "#1d1d1b"))

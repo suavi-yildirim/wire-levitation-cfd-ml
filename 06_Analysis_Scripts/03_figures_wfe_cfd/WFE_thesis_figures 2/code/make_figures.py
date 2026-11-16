@@ -35,7 +35,7 @@ _RUNS = None
 
 
 def runs() -> pd.DataFrame:
-    """All stable WFE runs with a known tube channel (793 of 794 raw-stable runs)."""
+    """All stable WFE runs with a known tube channel (all 794 raw-stable runs; delete .cache/cache_runs.pkl after the raw data change)."""
     global _RUNS
     if _RUNS is None:
         p = CACHE / "cache_runs.pkl"

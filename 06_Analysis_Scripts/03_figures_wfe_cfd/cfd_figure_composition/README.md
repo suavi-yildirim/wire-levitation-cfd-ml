@@ -1,4 +1,4 @@
-# Scripts from the 2026-10-19 thesis session
+# CFD figure composition scripts (session of 19 Oct 2026)
 
 Scripts that were run in the session to make the CFD, imbalance, convergence, air-volume and hardware figures of the thesis. They were copied from the session transcript (`01`–`34`) and from the session scratch folder (`thread_*`). The originals were not changed.
 
