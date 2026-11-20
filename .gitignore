@@ -7,14 +7,7 @@
 !/LICENSE-DATA.md
 !/CITATION.cff
 
-# Thesis LaTeX source (no CV) and the public thesis PDF (matriculation number removed)
-!/01_Thesis/
-/01_Thesis/*
-!/01_Thesis/LaTeX_Source/
-/01_Thesis/LaTeX_Source/CV/
-!/01_Thesis/PDF/
-/01_Thesis/PDF/*
-!/01_Thesis/PDF/MA_Yildirim_2026_CFD_ML_Wire_in_Tube_Conveying_public.pdf
+# Thesis LaTeX source and PDF stay local (01_Thesis/ is not published)
 
 # Experimental data (WFE runs, silencer effect, TFA, summaries)
 !/03_Experimental_Data/
